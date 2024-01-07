@@ -1,0 +1,45 @@
+{
+  "name": "framework_template",
+  "main": "src/index.ts",
+  "module": "src/index.ts",
+  "type": "module",
+  "scripts": {
+    "start": "bun run --watch src/index.ts",
+    "typecheck": "tsc",
+    "tailwind": "bunx tailwindcss -i src/styles/index.css -o src/styles/tailwind.css --watch"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.47",
+    "@types/react-dom": "^18.2.18",
+    "autoprefixer": "^10.4.16",
+    "bun-types": "^1.0.21",
+    "postcss": "^8.4.33",
+    "tailwindcss": "^3.4.1"
+  },
+  "dependencies": {
+    "@elysiajs/cors": "^0.8.0",
+    "@elysiajs/eden": "^0.8.0",
+    "@elysiajs/html": "^0.8.0",
+    "@elysiajs/static": "^0.8.1",
+    "elysia": "^0.8.8",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "solid-js": "^1.8.8",
+    "solid-ssr": "^1.7.2"
+  },
+  "peerDependencies": {
+    "typescript": "^5.3.3"
+  },
+  "description": "# Setup",
+  "version": "1.0.0",
+  "repository": {
+    "type": "git",
+    "url": "invalid"
+  },
+  "keywords": [
+    "ElysiaJS",
+    "Bun"
+  ],
+  "author": "Sakura Modlin",
+  "license": "MIT"
+}
