@@ -2,7 +2,7 @@ import { hydrateRoot } from "react-dom/client";
 import App from "./root";
 import Loading from "../../components/loading";
 
-function Layout() {
+function Layout(): JSX.Element {
   return (
     <html lang="en">
       <head>
@@ -15,12 +15,11 @@ function Layout() {
       <body className="select-none flex justify-center items-center">
         <Loading />
         <App />
-        <script type="module" src="/scripts/root.js" />
       </body>
     </html>
   );
 }
 
-hydrateRoot(document, <Layout />);
-
 export default Layout;
+
+hydrateRoot(document, <Layout />);

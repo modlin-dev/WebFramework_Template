@@ -1,5 +1,4 @@
 import { useState } from "react";
-import Loading from "../../components/loading";
 
 function Root(): JSX.Element {
   const [count, setCount] = useState(0);
@@ -9,7 +8,9 @@ function Root(): JSX.Element {
       Hello, world!
       <button
         className="bg-black rounded-full p-4 pt-2 pb-2 text-white"
-        onClick={() => setCount(count + 1)}
+        onClick={() => {
+          setCount(count + 1);
+        }}
       >
         {count}. Click Me!
       </button>
