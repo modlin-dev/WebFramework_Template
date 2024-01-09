@@ -17,6 +17,12 @@ export default function RootLayout({
         <meta charSet="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>{metadata.title?.toString() ?? "ElysiaJS"}</title>
+        <meta
+          name="description"
+          content={
+            metadata.description?.toString() ?? "Ergonomic Framework for Humans"
+          }
+        />
         <link
           rel="icon"
           href={metadata.icons?.toString() ?? "favicon.ico"}

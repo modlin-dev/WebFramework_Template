@@ -1,12 +1,18 @@
-import { renderToString } from "react-dom/server";
-import { join } from "path";
+import {
+  type ReactDOMServerReadableStream,
+  renderToReadableStream,
+} from "react-dom/server";
+import path from "path";
 import { Chalk } from "terminal/chalk";
 
-export async function render(name: string): Promise<string> {
+export async function render(
+  name: string
+): Promise<string | ReactDOMServerReadableStream> {
   try {
-    const Layout = (await import(join("../pages", name, "layout"))).default;
+    const Layout = (await import(path.join("../pages", name, "layout")))
+      .default;
     const Loading = (await import("../components/loading")).default;
-    const App = (await import(join("../pages", name, "page"))).default;
+    const App = (await import(path.join("../pages", name, "page"))).default;
 
     await Bun.build({
       entrypoints: [`src/pages/${name}/script.tsx`],
@@ -16,11 +22,11 @@ export async function render(name: string): Promise<string> {
       minify: true,
     });
 
-    const Stream = renderToString(
+    const Stream = await renderToReadableStream(
       <Layout>
         <Loading />
         <App />
-        <script src="/scripts/root.min.js"></script>
+        <script src={`/scripts/${name}.min.js`}></script>
       </Layout>
     );
 

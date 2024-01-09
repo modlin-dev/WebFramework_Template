@@ -3,6 +3,7 @@ import { Gradient, rgb } from "terminal/gradient";
 import logger from "terminal/logger";
 
 // Started Notice
+console.clear();
 logger.custom(
   new Gradient({
     colors: [rgb(129, 140, 248), rgb(192, 132, 252)],
