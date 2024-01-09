@@ -1,42 +1,32 @@
-import {
-  type ReactDOMServerReadableStream,
-  renderToReadableStream,
-} from "react-dom/server";
+import { renderToString } from "react-dom/server";
 import { join } from "path";
 import { Chalk } from "terminal/chalk";
 
-export class Server {
-  path: string;
-  filename: string;
-  constructor(path: string) {
-    const dirs = path.split("/");
-    this.filename = dirs[dirs.length - 1];
-    this.path = join(
-      import.meta.dir,
-      "../..",
-      path,
-      `${this.filename}.module.tsx`
+export async function render(name: string): Promise<string> {
+  try {
+    const Layout = (await import(join("../pages", name, "layout"))).default;
+    const Loading = (await import("../components/loading")).default;
+    const App = (await import(join("../pages", name, "page"))).default;
+
+    await Bun.build({
+      entrypoints: [`src/pages/${name}/script.tsx`],
+      outdir: "public/scripts",
+      naming: `${name}.min.js`,
+      target: "browser",
+      minify: true,
+    });
+
+    const Stream = renderToString(
+      <Layout>
+        <Loading />
+        <App />
+        <script src="/scripts/root.min.js"></script>
+      </Layout>
     );
-  }
 
-  async render(): Promise<string | ReactDOMServerReadableStream> {
-    try {
-      const Component = (await import(this.path)).default;
-
-      await Bun.build({
-        entrypoints: [join(this.path, `${this.filename}.module.tsx`)],
-        outdir: "public/scripts",
-        naming: `${this.filename}.js`,
-      });
-
-      const Stream = await renderToReadableStream(<Component />, {
-        bootstrapScripts: [`/scripts/${this.filename}.js`],
-      });
-
-      return Stream;
-    } catch {
-      return "Server error please refresh or contact the developer!";
-    }
+    return Stream;
+  } catch {
+    return "Server error please refresh the page or contact developers";
   }
 }
 export function URL(
@@ -48,7 +38,7 @@ export function URL(
     return Chalk.Forground.Magenta(`ws://${hostname}:${port}`);
   }
   if (protocol === "wss") {
-    return Chalk.Forground.Blue(`wss://${hostname}:${port}`);
+    return Chalk.Forground.Orange(`wss://${hostname}:${port}`);
   }
   if (protocol === "http") {
     return Chalk.Forground.Cyan(`http://${hostname}:${port}`);

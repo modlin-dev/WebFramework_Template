@@ -14,6 +14,14 @@ function Root(): JSX.Element {
       >
         {count}. Click Me!
       </button>
+      <img
+        alt="Catboy"
+        width={256}
+        height={256}
+        decoding="async"
+        data-nimg="1"
+        src={"/images/catboy.webp"}
+      />
     </main>
   );
 }

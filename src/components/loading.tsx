@@ -1,6 +1,4 @@
-import { type ReactNode } from "react";
-
-function Loading(): ReactNode {
+function Loading(): JSX.Element {
   return (
     <view className="bg-white dark:bg-black flex justify-center items-center h-screen w-screen gap-8 flex-col animate-fade fixed invisible">
       <svg
@@ -50,6 +48,7 @@ function Loading(): ReactNode {
       <line className="w-40 h-2 rounded-full border-black dark:border-white border overflow-hidden">
         <div className="h-full bg-black dark:bg-white animate-loading"></div>
       </line>
+      <audio autoPlay={true} src="/audio/intro.mp3" />
     </view>
   );
 }

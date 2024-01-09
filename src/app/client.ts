@@ -1,7 +1,6 @@
-import { edenTreaty } from "@elysiajs/eden";
+import { edenTreaty, edenFetch } from "@elysiajs/eden";
 import type { App } from "./server";
 
-const app = edenTreaty<App>("http://localhost");
+const app = edenTreaty<App>("http://localhost:3000");
 
-const result = await app.get();
-console.log(result.data);
+const fetch = edenFetch<App>("http://localhost:3000");

@@ -23597,7 +23597,7 @@ var Layout = function() {
           jsx_dev_runtime3.jsxDEV(loading_default, {}, undefined, false, undefined, this),
           jsx_dev_runtime3.jsxDEV(root_default, {}, undefined, false, undefined, this),
           jsx_dev_runtime3.jsxDEV("script", {
-            src: "/scripts/root.js"
+            src: "/scripts/root.mjs"
           }, undefined, false, undefined, this)
         ]
       }, undefined, true, undefined, this)

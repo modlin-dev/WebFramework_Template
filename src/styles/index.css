@@ -24,12 +24,12 @@
 
 .animate-loading {
   animation-name: loading;
-  animation-duration: 5s;
+  animation-duration: 2s;
 }
 
 .animate-fade {
   animation-name: fade;
-  animation-duration: 6s;
+  animation-duration: 3s;
 }
 
 @tailwind base;
