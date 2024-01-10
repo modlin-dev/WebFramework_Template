@@ -4,6 +4,7 @@ import { staticPlugin } from "@elysiajs/static";
 import { Gradient, rgb } from "terminal/gradient";
 import logger from "terminal/logger";
 import { URL, render } from "../modules/ssr";
+import readline from "readline";
 
 const app = new Elysia()
   .use(cors()) // Enables CORS
@@ -11,54 +12,60 @@ const app = new Elysia()
   .get("/", async ({ set }) => {
     set.headers["Content-Type"] = "text/html; charset=utf-8";
     set.status = 200;
-    return new Response(await render("root"), {
-      status: 200,
-      headers: { "Content-Type": "text/html" },
-    });
+    return await render("root");
   }) // Homepage
-  .get(
-    "/styles/:stylesheet",
-    ({ params }) => Bun.file(`src/styles/${params.stylesheet}`),
-    {
-      params: T.Object({
-        stylesheet: T.String(),
-      }),
-    }
-  )
-  .ws("/chat", {
+  .get("/styles/:stylesheet", ({ params }) => Bun.file(`src/styles/${params.stylesheet}`), {
+    params: T.Object({
+      stylesheet: T.String()
+    })
+  })
+  .ws("/server", {
     message(ws, message) {
       console.log(message);
-      ws.send("message");
+      const rl = readline.createInterface({
+        input: process.stdin,
+        output: process.stdout
+      });
+      function connect(): void {
+        rl.question("Client > ", answer => {
+          try {
+            ws.send(answer);
+            connect();
+          } catch {
+            connect();
+          }
+        });
+      }
+      connect();
     },
     body: T.String(),
-    response: T.String(),
+    response: T.String()
   })
   .all("*", async ({ set }) => {
     set.headers["Content-Type"] = "text/html; charset=utf-8";
     set.status = 404;
     return await render("not_found");
   }) // 404 Page
-  .listen(80, (server) => {
+  .listen(80, server => {
     const Elysia = new Gradient({
       colors: [rgb(129, 140, 248), rgb(192, 132, 252)],
       midpoint: 10,
-      text: "ElysiaJS",
+      text: "ElysiaJS"
     });
 
-    console.log(
-      `\n 🦊 ${Elysia.toForgroundText()} is ready in ${
-        Date.now() - logger.ptime
-      } ms`
+    logger.custom(
+      "\n",
+      `🦊 ${Elysia.toForgroundText()} is ready in ${Date.now() - logger.ptime} ms`
     );
     logger.custom(
-      "    > HTTP",
+      "      HTTP",
       URL("http", server.hostname, server.port),
       "\n            ",
       URL("https", server.hostname, server.port),
       " <-- Production"
     );
     logger.custom(
-      "    > WS  ",
+      "      WS  ",
       URL("ws", server.hostname, server.port),
       "\n            ",
       URL("wss", server.hostname, server.port),

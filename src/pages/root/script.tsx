@@ -1,12 +1,14 @@
-import { hydrateRoot } from "react-dom/client";
+import { hydrate } from "solid-js/web";
 import Layout from "./layout";
 import Loading from "../../components/loading";
 import App from "./page";
 
-hydrateRoot(
-  document,
-  <Layout>
-    <Loading />
-    <App />
-  </Layout>
+hydrate(
+  () => (
+    <Layout>
+      <Loading />
+      <App />
+    </Layout>
+  ),
+  document
 );

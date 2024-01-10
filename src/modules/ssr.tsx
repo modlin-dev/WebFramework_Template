@@ -1,38 +1,48 @@
-import {
-  type ReactDOMServerReadableStream,
-  renderToReadableStream,
-} from "react-dom/server";
 import path from "path";
 import { Chalk } from "terminal/chalk";
+import { renderToString } from "solid-js/web";
+import React from "react";
 
-export async function render(
-  name: string
-): Promise<string | ReactDOMServerReadableStream> {
+export async function render(name: string): Promise<Response> {
   try {
-    const Layout = (await import(path.join("../pages", name, "layout")))
-      .default;
+    const Layout = (await import(path.join("../pages", name, "layout"))).default;
     const Loading = (await import("../components/loading")).default;
     const App = (await import(path.join("../pages", name, "page"))).default;
 
+    /*
     await Bun.build({
       entrypoints: [`src/pages/${name}/script.tsx`],
       outdir: "public/scripts",
       naming: `${name}.min.js`,
       target: "browser",
-      minify: true,
+      minify: true
     });
+    */
 
-    const Stream = await renderToReadableStream(
+    const component = (
       <Layout>
         <Loading />
         <App />
-        <script src={`/scripts/${name}.min.js`}></script>
       </Layout>
     );
+    const html = renderToString(() => (
+      <Layout>
+        <Loading />
+        <App />
+      </Layout>
+    ));
+    console.log(component);
+    // <script src={`/scripts/${name}.min.js`} />
 
-    return Stream;
-  } catch {
-    return "Server error please refresh the page or contact developers";
+    return new Response(html, {
+      status: 200,
+      headers: { "Content-Type": "text/html" }
+    });
+  } catch (e) {
+    console.error(e);
+    return new Response("Server error please refresh the page or contact developers", {
+      status: 500
+    });
   }
 }
 export function URL(

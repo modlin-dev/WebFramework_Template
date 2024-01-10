@@ -1,6 +1,11 @@
-import { edenTreaty, edenFetch } from "@elysiajs/eden";
+import { edenTreaty } from "@elysiajs/eden";
 import type { App } from "./server";
 
-const app = edenTreaty<App>("http://localhost:3000");
+const app = edenTreaty<App>("http://localhost");
+const chat = app.chat.subscribe();
+await chat.send("Hello, world!");
+chat.on("message", (message) => {
+  console.log(message.data);
+});
 
-const fetch = edenFetch<App>("http://localhost:3000");
+// const fetch = edenFetch<App>("http://localhost:3000");

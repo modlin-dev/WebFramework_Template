@@ -4,6 +4,7 @@
   "module": "src/index.ts",
   "type": "module",
   "scripts": {
+    "dev": "tailwindcss -i src/styles/index.css -o src/styles/tailwind.css --watch && bun run --watch src/index.ts",
     "start": "bun run --watch src/index.ts",
     "build": "bun build src/index.ts --outdir dist",
     "preview": "bun run dist/index.js",
@@ -37,10 +38,11 @@
     "@elysiajs/stream": "^0.8.0",
     "@next/font": "^14.0.4",
     "elysia": "^0.8.8",
+    "eslint-plugin-solid": "^0.13.1",
     "next": "^14.0.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "solid-js": "^1.8.8",
+    "solid-js": "latest",
     "solid-ssr": "^1.7.2"
   },
   "peerDependencies": {

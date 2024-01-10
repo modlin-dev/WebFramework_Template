@@ -1,6 +1,9 @@
+import { type JSX } from "solid-js";
+import React from "react";
+
 function Loading(): JSX.Element {
   return (
-    <view className="bg-white dark:bg-black flex justify-center items-center h-screen w-screen gap-8 flex-col animate-fade fixed invisible">
+    <noindex class="bg-white dark:bg-black flex justify-center items-center h-screen w-screen gap-8 flex-col animate-fade fixed invisible">
       <svg
         version="1.1"
         id="Layer_1"
@@ -8,7 +11,7 @@ function Loading(): JSX.Element {
         y="0px"
         viewBox="0 0 110.96 62.27"
         width={64}
-        className="dark:invert"
+        class="dark:invert"
       >
         <g>
           <path
@@ -45,11 +48,11 @@ function Loading(): JSX.Element {
           />
         </g>
       </svg>
-      <line className="w-40 h-2 rounded-full border-black dark:border-white border overflow-hidden">
-        <div className="h-full bg-black dark:bg-white animate-loading"></div>
+      <line class="w-40 h-2 rounded-full border-black dark:border-white border overflow-hidden">
+        <div class="h-full bg-black dark:bg-white animate-loading" />
       </line>
-      <audio autoPlay={true} src="/audio/intro.mp3" />
-    </view>
+      <audio autoplay={true} src="/audio/intro.mp3" />
+    </noindex>
   );
 }
 
