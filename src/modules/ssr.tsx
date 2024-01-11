@@ -19,7 +19,7 @@ export function URL(
   return Chalk.Forground.Red(`https://${hostname}:${port}`)
 }
 
-export function* readAllFiles(dir: string): any {
+export function* readAllFiles(dir: string): Generator<string> {
   const files = fs.readdirSync(dir, { withFileTypes: true })
 
   for (const file of files) {
