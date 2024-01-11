@@ -1,5 +1,5 @@
-import { type JSX } from 'preact/compat'
-import { useState } from 'preact/hooks'
+// import { type JSX } from 'preact/compat'
+import { useState } from 'react'
 import { type App } from '../app/server'
 import { edenTreaty } from '@elysiajs/eden'
 

@@ -1,11 +1,12 @@
 import { Elysia, t as T } from 'elysia'
 import { cors } from '@elysiajs/cors'
+import { compression } from 'elysia-compression'
 import { Gradient, rgb } from 'terminal/gradient'
 import logger from 'terminal/logger'
 import { URL, readAllFiles } from '../modules/ssr'
-import { renderToString } from 'preact-render-to-string'
+import { renderToReadableStream } from 'react-dom/server'
 
-function staticPlugin(data?: { path?: string; prefix?: string }) {
+function staticPlugin (data?: { path?: string, prefix?: string }) {
   const app = new Elysia({ name: 'staticPlugin' })
   for (const file of readAllFiles(data?.path ?? 'public')) {
     app.get((data?.prefix ?? '/') + file.slice(7), ({ set }) => {
@@ -28,36 +29,48 @@ const app = new Elysia()
     const { default: Loading } = await import('../components/loading')
     const { default: App } = await import('../pages/home/page')
 
-    const html = renderToString(
+    const html = await renderToReadableStream(
       <RootLayout>
         <Loading />
         <App />
-        <script src={`/scripts/home.min.js.gz`} async defer />
+        <script src={'/scripts/home.min.js'} async defer />
       </RootLayout>
     )
-    /*
+
     await Bun.build({
-      entrypoints: [`src/pages/home/script.tsx`],
+      entrypoints: ['src/pages/home/script.tsx'],
       outdir: 'public/scripts',
-      naming: `home.min.js`,
+      naming: 'home.min.js',
       target: 'browser',
       minify: true
     })
-    */
 
-    set.headers['Content-Type'] = 'text/plain, text/html'
-    set.headers['Content-Encoding'] = 'gzip'
-    set.headers['Accept-Encoding'] = 'gzip, deflate, br, zstd'
+    set.headers['Content-Type'] = 'text/plain, text/html; charset=utf-8'
+    // set.headers['Content-Encoding'] = 'gzip'
+    // set.headers['Accept-Encoding'] = 'gzip, deflate, br, zstd'
     set.status = 200
-    return Bun.gzipSync(Buffer.from('<!DOCTYPE html>' + html))
-  }) // Homepage
-  .get('/styles/:stylesheet', ({ params }) => Bun.file(`src/styles/${params.stylesheet}`), {
-    params: T.Object({
-      stylesheet: T.String()
+    return new Response(html, {
+      status: 200,
+      headers: { 'Content-Type': 'text/html; charset=utf-8' }
     })
-  })
+  }) // Homepage
+  .get(
+    '/styles/:stylesheet',
+    ({ params, set }) => {
+      if (params.stylesheet.endsWith('.gz')) {
+        set.headers['Content-Encoding'] = 'gzip'
+        set.headers['Accept-Encoding'] = 'gzip, deflate, br, zstd'
+      }
+      return Bun.file(`src/styles/${params.stylesheet}`)
+    },
+    {
+      params: T.Object({
+        stylesheet: T.String()
+      })
+    }
+  )
   .ws('/server', {
-    message(_ws, _message) {},
+    message (_ws, _message) {},
     body: T.String(),
     response: T.String()
   })
@@ -67,9 +80,9 @@ const app = new Elysia()
     const { default: App } = await import('../pages/not_found/page')
 
     await Bun.build({
-      entrypoints: [`src/pages/not_found/script.tsx`],
+      entrypoints: ['src/pages/not_found/script.tsx'],
       outdir: 'public/scripts',
-      naming: `not_found.min.js`,
+      naming: 'not_found.min.js',
       target: 'browser',
       minify: true
     })
@@ -77,7 +90,7 @@ const app = new Elysia()
       <RootLayout>
         <Loading />
         <App />
-        <script src={`/scripts/not_found.min.js`} async={true} defer={true} />
+        <script src={'/scripts/not_found.min.js'} async={true} defer={true} />
       </RootLayout>
     )
 

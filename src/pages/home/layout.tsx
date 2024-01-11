@@ -1,4 +1,4 @@
-import { type JSX, type ReactNode } from 'preact/compat'
+import { type ReactNode } from 'react'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
@@ -17,7 +17,8 @@ export default function RootLayout({ children }: { children: ReactNode }): JSX.E
         <link rel="icon" href={metadata.icons?.toString() ?? '/favicon.ico'} type="image/x-icon" />
         <link
           rel="stylesheet"
-          href="/styles/tailwind.css"
+          href="/tailwind.css.gz"
+          type="text/css"
           media="all"
           disabled={false}
           defer={true}

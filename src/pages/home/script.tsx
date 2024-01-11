@@ -1,12 +1,12 @@
-import { hydrate } from 'preact'
+import { hydrateRoot } from 'react-dom/client'
 import RootLayout from './layout'
 import App from './page'
 import Loading from '../../components/loading'
 
-hydrate(
+hydrateRoot(
+  document,
   <RootLayout>
     <Loading />
     <App />
-  </RootLayout>,
-  document
+  </RootLayout>
 )

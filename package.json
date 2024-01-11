@@ -44,7 +44,6 @@
     "elysia-compression": "^0.0.7",
     "eslint-plugin-solid": "^0.13.1",
     "next": "^14.0.4",
-    "preact": "^10.19.3",
     "preact-render-to-string": "^6.3.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
