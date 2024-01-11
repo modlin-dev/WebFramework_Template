@@ -1,8 +1,29 @@
-import { type JSX } from 'preact'
+import { type JSX } from 'preact/compat'
+import { useState } from 'preact/hooks'
+import { type App } from '../app/server'
+import { edenTreaty } from '@elysiajs/eden'
 
 function Loading(): JSX.Element {
+  // --
+  const [getStyle, setStyle] = useState<any>({ visibility: 'hidden' })
+  const [getClass, setClass] = useState(
+    'bg-white dark:bg-black flex justify-center items-center h-screen w-screen gap-8 flex-col animate-fade fixed invisible transition-all'
+  )
+
+  const server = edenTreaty<App>('http://localhost').server.subscribe()
+
+  server.on('close', () => {
+    setStyle({ visibility: 'visible', opacity: 1 })
+    setClass(
+      'bg-white dark:bg-black flex justify-center items-center h-screen w-screen gap-8 flex-col fixed transition-all'
+    )
+    setTimeout(() => {
+      window.location.reload()
+    }, 2000)
+  })
+  // --
   return (
-    <div class="bg-white dark:bg-black flex justify-center items-center h-screen w-screen gap-8 flex-col animate-fade fixed invisible">
+    <div style={getStyle} class={getClass}>
       <svg
         version="1.1"
         id="Layer_1"

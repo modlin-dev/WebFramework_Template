@@ -1,37 +1,41 @@
-import { type JSX } from 'preact'
+import { type JSX } from 'preact/compat'
 import { useState } from 'preact/hooks'
 import { edenTreaty } from '@elysiajs/eden'
 import { type App } from '../../app/server'
 
-function Root(): JSX.Element {
+function Home(): JSX.Element {
   // --
   const [count, setCount] = useState(0)
   const [isConnected, setConnected] = useState(false)
   const server = edenTreaty<App>('http://localhost').server.subscribe()
 
-  server.on('message', message => {
+  server.on('message', (message) => {
     console.log(message.data)
   })
-
   server.on('open', () => {
-    setConnected(true)
     console.log('[WS] Connected')
+    setConnected(true)
   })
-
   server.on('close', () => {
-    window.location.reload()
-    setConnected(false)
     console.log('[WS] Disconnected')
+    setConnected(false)
+  })
+  server.on('error', () => {
+    console.log('[WS] Connecting')
+    setConnected(false)
   })
   // --
   return (
     <main class="flex justify-start items-center gap-6 flex-col h-screen">
       <nav class="w-full h-20 bg-slate-50 border-b border-slate-700 dark:bg-black dark:border-slate-300" />
       <button
-        class="bg-blue-400 rounded-full p-4 pt-2 pb-2 text-white"
+        class="bg-black rounded-full p-4 pt-2 pb-2 text-white"
         onClick={() => {
           setCount(count + 1)
-          if (isConnected) server.send(`Checking for updates ${count}`)
+          if (isConnected) {
+            server.send(`Checking for updates ${count}`)
+            setConnected(false)
+          }
         }}
       >
         {count}. Click Me!
@@ -48,4 +52,4 @@ function Root(): JSX.Element {
   )
 }
 
-export default Root
+export default Home

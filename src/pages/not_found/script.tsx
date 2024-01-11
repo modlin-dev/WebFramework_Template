@@ -1,12 +1,12 @@
 import { hydrateRoot } from "react-dom/client";
-import Layout from "./layout";
+import RootLayout from "./layout";
 import Loading from "../../components/loading";
 import App from "./page";
 
 hydrateRoot(
   document,
-  <Layout>
+  <RootLayout>
     <Loading />
     <App />
-  </Layout>
+  </RootLayout>
 );
