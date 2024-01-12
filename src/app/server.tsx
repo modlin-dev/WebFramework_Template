@@ -1,12 +1,12 @@
 import { Elysia, t as T } from 'elysia'
 import { cors } from '@elysiajs/cors'
-import { compression } from 'elysia-compression'
 import { Gradient, rgb } from 'terminal/gradient'
 import logger from 'terminal/logger'
 import { URL, readAllFiles } from '../modules/ssr'
 import { renderToReadableStream } from 'react-dom/server'
+import React from 'react'
 
-function staticPlugin (data?: { path?: string, prefix?: string }) {
+function staticPlugin (data?: { path?: string, prefix?: string }): Elysia {
   const app = new Elysia({ name: 'staticPlugin' })
   for (const file of readAllFiles(data?.path ?? 'public')) {
     app.get((data?.prefix ?? '/') + file.slice(7), ({ set }) => {
@@ -23,7 +23,6 @@ function staticPlugin (data?: { path?: string, prefix?: string }) {
 const app = new Elysia()
   .use(cors()) // Enables CORS
   .use(staticPlugin())
-  // .use(compression())
   .get('/', async ({ set }) => {
     const { default: RootLayout } = await import('../pages/home/layout')
     const { default: Loading } = await import('../components/loading')
@@ -48,11 +47,7 @@ const app = new Elysia()
     set.headers['Content-Type'] = 'text/plain, text/html; charset=utf-8'
     // set.headers['Content-Encoding'] = 'gzip'
     // set.headers['Accept-Encoding'] = 'gzip, deflate, br, zstd'
-    set.status = 200
-    return new Response(html, {
-      status: 200,
-      headers: { 'Content-Type': 'text/html; charset=utf-8' }
-    })
+    return html
   }) // Homepage
   .get(
     '/styles/:stylesheet',
@@ -86,13 +81,13 @@ const app = new Elysia()
       target: 'browser',
       minify: true
     })
-    const html = renderToString(
+    const html = renderToString(() => (
       <RootLayout>
         <Loading />
         <App />
         <script src={'/scripts/not_found.min.js'} async={true} defer={true} />
       </RootLayout>
-    )
+    ))
 
     set.headers['Content-Type'] = 'text/html; charset=utf-8'
     set.headers['Content-Encoding'] = 'br'

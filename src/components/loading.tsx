@@ -1,9 +1,9 @@
-// import { type JSX } from 'preact/compat'
-import { useState } from 'react'
+import { block } from 'million/react'
+import React, { useState } from 'react'
 import { type App } from '../app/server'
 import { edenTreaty } from '@elysiajs/eden'
 
-function Loading(): JSX.Element {
+const Block = block(function Loading (): React.ReactNode {
   // --
   const [getStyle, setStyle] = useState<any>({ visibility: 'hidden' })
   const [getClass, setClass] = useState(
@@ -23,7 +23,7 @@ function Loading(): JSX.Element {
   })
   // --
   return (
-    <div style={getStyle} class={getClass}>
+    <div style={getStyle} className={getClass}>
       <svg
         version="1.1"
         id="Layer_1"
@@ -31,7 +31,7 @@ function Loading(): JSX.Element {
         y="0px"
         viewBox="0 0 110.96 62.27"
         width={64}
-        class="dark:invert"
+        className="dark:invert"
       >
         <g>
           <path
@@ -68,12 +68,12 @@ function Loading(): JSX.Element {
           />
         </g>
       </svg>
-      <line class="w-40 h-2 rounded-full border-black dark:border-white border overflow-hidden">
-        <div class="h-full bg-black dark:bg-white animate-loading" />
+      <line className="w-40 h-2 rounded-full border-black dark:border-white border overflow-hidden">
+        <div className="h-full bg-black dark:bg-white animate-loading" />
       </line>
-      <audio autoplay={true} src="/audio/intro.mp3" />
+      <audio autoPlay={true} src="/audio/intro.mp3" />
     </div>
   )
-}
+})
 
-export default Loading
+export default Block

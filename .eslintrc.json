@@ -8,6 +8,6 @@
     "ecmaVersion": "latest",
     "sourceType": "module"
   },
-  "plugins": ["react"],
+  "plugins": ["solid"],
   "rules": {}
 }

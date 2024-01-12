@@ -1,4 +1,5 @@
-import { type ReactNode } from 'react'
+import { block } from 'million/react'
+import React from 'react'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
@@ -6,18 +7,18 @@ export const metadata: Metadata = {
   description: 'Web Framework Template'
 }
 
-export default function RootLayout({ children }: { children: ReactNode }): JSX.Element {
+const Block = block(function RootLayout (props: { children: React.ReactNode }): React.ReactNode {
   return (
     <html lang="en">
       <head>
-        <meta charset="UTF-8" />
+        <meta charSet="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>{metadata.title?.toString() ?? ''}</title>
         <meta name="description" content={metadata.description ?? ''} />
         <link rel="icon" href={metadata.icons?.toString() ?? '/favicon.ico'} type="image/x-icon" />
         <link
           rel="stylesheet"
-          href="/tailwind.css.gz"
+          href="/styles/tailwind.css"
           type="text/css"
           media="all"
           disabled={false}
@@ -26,9 +27,11 @@ export default function RootLayout({ children }: { children: ReactNode }): JSX.E
         />
       </head>
       <body>
-        {children}
+        {props.children}
         <script src="/scripts/htmx.min.js.gz" async={true} defer={true} />
       </body>
     </html>
   )
-}
+})
+
+export default Block

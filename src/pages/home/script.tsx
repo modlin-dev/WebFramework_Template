@@ -1,3 +1,4 @@
+import React from 'react'
 import { hydrateRoot } from 'react-dom/client'
 import RootLayout from './layout'
 import App from './page'

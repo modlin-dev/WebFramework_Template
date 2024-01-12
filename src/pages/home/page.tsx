@@ -1,9 +1,9 @@
-// import { type JSX } from 'preact/compat'
-import { useState } from 'react'
+import { block } from 'million/react'
+import React, { useState } from 'react'
 import { edenTreaty } from '@elysiajs/eden'
 import { type App } from '../../app/server'
 
-function Home(): JSX.Element {
+const Block = block(function Home (): React.ReactNode {
   // --
   const [count, setCount] = useState(0)
   const [isConnected, setConnected] = useState(false)
@@ -26,10 +26,10 @@ function Home(): JSX.Element {
   })
   // --
   return (
-    <main class="flex justify-start items-center gap-6 flex-col h-screen">
-      <nav class="w-full h-20 bg-slate-50 border-b border-slate-700 dark:bg-black dark:border-slate-300" />
+    <main className="flex justify-start items-center gap-6 flex-col h-screen">
+      <nav className="w-full h-20 bg-slate-50 border-b border-slate-700 dark:bg-black dark:border-slate-300" />
       <button
-        class="bg-black rounded-full p-4 pt-2 pb-2 text-white"
+        className="bg-black rounded-full p-4 pt-2 pb-2 text-white"
         onClick={() => {
           setCount(count + 1)
           if (isConnected) {
@@ -50,6 +50,6 @@ function Home(): JSX.Element {
       />
     </main>
   )
-}
+})
 
-export default Home
+export default Block

@@ -4,7 +4,7 @@ import logger from 'terminal/logger'
 import term from 'child_process'
 
 term.exec(
-  'bunx tailwindcss -i src/styles/index.css -o src/styles/tailwind.css --minify',
+  'bunx tailwindcss -i public/styles/index.css -o public/styles/tailwind.css --minify',
   (_error, _stdout, stderr) => {
     console.log(stderr)
   }
