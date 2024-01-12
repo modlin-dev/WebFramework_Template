@@ -1,3 +1,4 @@
+import React, { type JSX } from 'react'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
@@ -5,7 +6,7 @@ export const metadata: Metadata = {
   description: 'Opps, seems like you entered the wrong page!'
 }
 
-export default function RootLayout ({ children }: { children: React.ReactNode }): JSX.Element {
+function RootLayout ({ children }: { children: React.ReactNode }): JSX.Element {
   return (
     <html lang="en">
       <head>
@@ -19,15 +20,14 @@ export default function RootLayout ({ children }: { children: React.ReactNode })
           href="/styles/tailwind.css"
           type="text/css"
           media="all"
-          disabled={false}
-          defer={true}
-          async={true}
         />
       </head>
       <body>
         {children}
-        <script src="/scripts/htmx.min.js.gz" async={true} defer={true} />
+        <script src="/scripts/htmx.min.js.gz" async defer />
       </body>
     </html>
   )
 }
+
+export default RootLayout

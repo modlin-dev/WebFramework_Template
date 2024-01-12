@@ -1,9 +1,8 @@
-import { block } from 'million/react'
-import React, { useState } from 'react'
+import React, { useState, type JSX } from 'react'
 import { edenTreaty } from '@elysiajs/eden'
 import { type App } from '../../app/server'
 
-const Block = block(function Home (): React.ReactNode {
+function Home (): JSX.Element {
   // --
   const [count, setCount] = useState(0)
   const [isConnected, setConnected] = useState(false)
@@ -29,7 +28,7 @@ const Block = block(function Home (): React.ReactNode {
     <main className="flex justify-start items-center gap-6 flex-col h-screen">
       <nav className="w-full h-20 bg-slate-50 border-b border-slate-700 dark:bg-black dark:border-slate-300" />
       <button
-        className="bg-black rounded-full p-4 pt-2 pb-2 text-white"
+        className="bg-white rounded-full p-4 pt-2 pb-2 text-black"
         onClick={() => {
           setCount(count + 1)
           if (isConnected) {
@@ -50,6 +49,6 @@ const Block = block(function Home (): React.ReactNode {
       />
     </main>
   )
-})
+}
 
-export default Block
+export default Home

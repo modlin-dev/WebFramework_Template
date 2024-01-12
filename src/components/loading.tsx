@@ -1,9 +1,8 @@
-import { block } from 'million/react'
 import React, { useState } from 'react'
 import { type App } from '../app/server'
 import { edenTreaty } from '@elysiajs/eden'
 
-const Block = block(function Loading (): React.ReactNode {
+function Loading (): React.ReactNode {
   // --
   const [getStyle, setStyle] = useState<any>({ visibility: 'hidden' })
   const [getClass, setClass] = useState(
@@ -74,6 +73,6 @@ const Block = block(function Loading (): React.ReactNode {
       <audio autoPlay={true} src="/audio/intro.mp3" />
     </div>
   )
-})
+}
 
-export default Block
+export default Loading

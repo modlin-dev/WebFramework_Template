@@ -1,13 +1,11 @@
-import { block } from 'million/react'
-import React from 'react'
+import React, { type JSX } from 'react'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Elysia + Bun + React',
   description: 'Web Framework Template'
 }
-
-const Block = block(function RootLayout (props: { children: React.ReactNode }): React.ReactNode {
+function RootLayout (props: { children: React.ReactNode }): JSX.Element {
   return (
     <html lang="en">
       <head>
@@ -21,17 +19,14 @@ const Block = block(function RootLayout (props: { children: React.ReactNode }): 
           href="/styles/tailwind.css"
           type="text/css"
           media="all"
-          disabled={false}
-          defer={true}
-          async={true}
         />
       </head>
-      <body>
+      <body className="bg-black">
         {props.children}
-        <script src="/scripts/htmx.min.js.gz" async={true} defer={true} />
+        <script src="/scripts/htmx.min.js.gz" async defer />
       </body>
     </html>
   )
-})
+}
 
-export default Block
+export default RootLayout

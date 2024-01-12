@@ -1,6 +1,16 @@
-import million from "million/compiler"
-export default {
+const million = require("million/compiler");
+ 
+module.exports = {
   webpack: {
-    plugins: { add: [million.webpack({ auto: true })] }
-  }
+    plugins: {
+      add: [
+        million.webpack({
+          auto: {
+            threshold: 0.05,
+            skip: ["useBadHook", /badVariable/g],
+          },
+        }),
+      ],
+    },
+  },
 };

@@ -3,7 +3,7 @@ import { cors } from '@elysiajs/cors'
 import { Gradient, rgb } from 'terminal/gradient'
 import logger from 'terminal/logger'
 import { URL, readAllFiles } from '../modules/ssr'
-import { renderToReadableStream } from 'react-dom/server'
+import { renderToString } from 'react-dom/server'
 import React from 'react'
 
 function staticPlugin (data?: { path?: string, prefix?: string }): Elysia {
@@ -28,7 +28,7 @@ const app = new Elysia()
     const { default: Loading } = await import('../components/loading')
     const { default: App } = await import('../pages/home/page')
 
-    const html = await renderToReadableStream(
+    const html = renderToString(
       <RootLayout>
         <Loading />
         <App />
@@ -44,10 +44,10 @@ const app = new Elysia()
       minify: true
     })
 
-    set.headers['Content-Type'] = 'text/plain, text/html; charset=utf-8'
+    set.headers['Content-Type'] = 'text/html; charset=utf8'
     // set.headers['Content-Encoding'] = 'gzip'
     // set.headers['Accept-Encoding'] = 'gzip, deflate, br, zstd'
-    return html
+    return '<!DOCTYPE html>' + html
   }) // Homepage
   .get(
     '/styles/:stylesheet',
@@ -81,18 +81,18 @@ const app = new Elysia()
       target: 'browser',
       minify: true
     })
-    const html = renderToString(() => (
+    const html = renderToString(
       <RootLayout>
         <Loading />
         <App />
-        <script src={'/scripts/not_found.min.js'} async={true} defer={true} />
+        <script src={'/scripts/not_found.min.js'} async defer />
       </RootLayout>
-    ))
+    )
 
-    set.headers['Content-Type'] = 'text/html; charset=utf-8'
-    set.headers['Content-Encoding'] = 'br'
-    set.headers['Accept-Encoding'] = 'gzip, compress, br'
-    set.status = 200
+    set.headers['Content-Type'] = 'text/html; charset=utf8'
+    // set.headers['Content-Encoding'] = 'br'
+    // set.headers['Accept-Encoding'] = 'gzip, compress, br'
+    // set.status = 200
     return '<!DOCTYPE html>' + html
   }) // 404 Page
   .listen(80, (server) => {
