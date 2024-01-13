@@ -1,31 +1,18 @@
 import { Elysia, t as T } from 'elysia'
 import { cors } from '@elysiajs/cors'
-import { Gradient, rgb } from 'terminal/gradient'
-import { Chalk } from 'terminal/chalk'
+import { servePlugin } from '../plugins/serve.plugin.ts'
+import { loggerPlugin } from '../plugins/logger.plugin.ts'
 import logger from 'terminal/logger'
-import { URL } from '../modules/ssr'
-import serve from '../plugins/serve.plugin.ts'
+import { Chalk } from 'terminal/chalk'
+import { Gradient, rgb } from 'terminal/gradient'
 import { renderToString } from 'react-dom/server'
+import { URL } from '../modules/ssr'
 import React from 'react'
 
 const app = new Elysia()
+  .use(servePlugin()) // Serves a Public Directory
+  .use(loggerPlugin()) // Use only on Developement
   .use(cors()) // Enables CORS
-  .use(serve()) // Serves a Public Directory
-  // .use(compression())
-  // .use(loggerPlugin())
-  .onRequest(({ request, set }) => {
-    const Method = request.method
-      .replace('GET', Chalk.Forground.Blue('GET'))
-      .replace('POST', Chalk.Forground.Green('POST'))
-      .replace('PUT', '\x1B[38mPUT\x1B[0m')
-      .replace('DELETE', Chalk.Forground.Red('DELETE'))
-      .replace('PATCH', Chalk.Forground.Orange('PATCH'))
-      .replace('CONNECT', Chalk.Forground.Cyan('CONNECT'))
-      .replace('HEAD', Chalk.Forground.White('HEAD'))
-      .replace('OPTIONS', Chalk.Forground.Magenta('OPTIONS'))
-
-    logger.log(Method, Chalk.Forground.Cyan(request.url), set.status)
-  })
   .get('/', async ({ set }) => {
     if (Bun.env.MODE === 'PRODUCTION') {
       set.headers['Content-Encoding'] = 'gzip'
@@ -63,24 +50,14 @@ const app = new Elysia()
   })
   .all('*', async ({ set }) => {
     if (Bun.env.MODE === 'PRODUCTION') {
+      set.headers['Content-Encoding'] = 'gzip'
+      set.status = 404
       return Bun.file('src/html/not_found.html')
     } else {
       const { default: RootLayout } = await import('../pages/not_found/layout')
       const { default: Loading } = await import('../components/loading')
       const { default: App } = await import('../pages/not_found/page')
 
-      const html = renderToString(
-        <RootLayout>
-          <Loading />
-          <App />
-          <script src="/scripts/not_found.min.js" async defer />
-        </RootLayout>
-      )
-
-      await Bun.write(
-        'src/html/not_found.html',
-        Bun.gzipSync(Buffer.from('<!DOCTYPE html>' + html))
-      )
       await Bun.build({
         entrypoints: ['src/pages/not_found/script.tsx'],
         outdir: 'public/scripts',
@@ -89,9 +66,21 @@ const app = new Elysia()
         minify: true
       })
 
-      // set.headers['Content-Encoding'] = 'gzip'
-      // set.headers['Accept-Encoding'] = 'gzip, deflate, br, zstd'
+      const html = renderToString(
+        <RootLayout>
+          <Loading />
+          <App />
+          <script src="/scripts/not_found.min.js" async defer />
+        </RootLayout>
+      )
+      await Bun.write(
+        'src/html/not_found.html',
+        Bun.gzipSync(Buffer.from('<!DOCTYPE html>' + html))
+      )
+
+      set.headers['Content-Encoding'] = 'gzip'
       set.headers['Content-Type'] = 'text/html; charset=utf8'
+      set.status = 404
       return '<!DOCTYPE html>' + html
     }
   }) // 404 Page
@@ -107,14 +96,14 @@ const app = new Elysia()
       `🦊 ${Elysia.toForgroundText()} is ready in ${Date.now() - logger.ptime} ms`
     )
     logger.custom(
-      '      HTTP',
+      Chalk.Forground.Blue('      HTTP'),
       URL('http', server.hostname, server.port),
       '\n            ',
       URL('https', server.hostname, server.port),
       ' <-- Production'
     )
     logger.custom(
-      '      WS  ',
+      Chalk.Forground.Magenta('      WS  '),
       URL('ws', server.hostname, server.port),
       '\n            ',
       URL('wss', server.hostname, server.port),

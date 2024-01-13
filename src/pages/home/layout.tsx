@@ -5,6 +5,7 @@ export const metadata: Metadata = {
   title: 'Elysia + Bun + React',
   description: 'Web Framework Template'
 }
+
 function RootLayout (props: { children: React.ReactNode }): JSX.Element {
   return (
     <html lang="en">

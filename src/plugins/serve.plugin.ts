@@ -14,7 +14,7 @@ export function * readFilesSync (dir: string): Generator<string> {
   }
 }
 
-function serve (_data?: { path?: string | 'public', prefix?: string | '/' }): Elysia {
+export function servePlugin (_data?: { path?: string | 'public', prefix?: string | '/' }): Elysia {
   const app = new Elysia({ name: 'serve' })
   const data = {
     path: _data?.path ?? 'public',
@@ -41,4 +41,4 @@ function serve (_data?: { path?: string | 'public', prefix?: string | '/' }): El
   return app
 }
 
-export default serve
+export default servePlugin
