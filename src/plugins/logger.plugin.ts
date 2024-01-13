@@ -33,8 +33,10 @@ export function loggerPlugin (): Elysia {
 
       return Chalk.Forground.Cyan(status.toString())
     }
+    const sliced = request.url.split('/')
+    const endpoint = Chalk.Forground.Cyan(request.url.slice(7 + sliced[2].length))
 
-    logger.log(Method, Chalk.Forground.Cyan(request.url), Status(set.status ?? 100))
+    logger.log(Method, endpoint, sliced[0].replace(':', '').toUpperCase())
   })
 
   return app

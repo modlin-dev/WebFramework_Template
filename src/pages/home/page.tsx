@@ -5,7 +5,7 @@ import { type App } from '../../app/server'
 function Home (): JSX.Element {
   // --
   const [isConnected, setConnected] = useState(false)
-  const server = edenTreaty<App>('http://localhost').server.subscribe()
+  const server = edenTreaty<App>('ws://localhost').server.subscribe()
 
   server.on('open', () => {
     if (!isConnected) console.log('[WS] Connected')

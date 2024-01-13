@@ -9,7 +9,7 @@ function Loading (): React.ReactNode {
     'bg-white dark:bg-black flex justify-center items-center h-screen w-screen gap-8 flex-col animate-fade fixed invisible transition-all'
   )
 
-  const server = edenTreaty<App>('http://localhost').server.subscribe()
+  const server = edenTreaty<App>('ws://localhost').server.subscribe()
 
   server.on('close', () => {
     setStyle({ visibility: 'visible', opacity: 1 })
