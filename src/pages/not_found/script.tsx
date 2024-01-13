@@ -1,7 +1,7 @@
-import { hydrateRoot } from "react-dom/client";
-import RootLayout from "./layout";
-import Loading from "../../components/loading";
-import App from "./page";
+import { hydrateRoot } from 'react-dom/client'
+import RootLayout from './layout'
+import Loading from '../../components/loading'
+import App from './page'
 
 hydrateRoot(
   document,
@@ -9,4 +9,4 @@ hydrateRoot(
     <Loading />
     <App />
   </RootLayout>
-);
+)

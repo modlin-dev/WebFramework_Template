@@ -23,7 +23,7 @@ function RootLayout (props: { children: React.ReactNode }): JSX.Element {
       </head>
       <body className="bg-black">
         {props.children}
-        <script src="/scripts/htmx.min.js.gz" async defer />
+        <script src="/scripts/htmx.min.js" async defer />
       </body>
     </html>
   )

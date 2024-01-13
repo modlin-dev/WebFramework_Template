@@ -33,7 +33,6 @@ function Home (): JSX.Element {
           setCount(count + 1)
           if (isConnected) {
             server.send(`Checking for updates ${count}`)
-            setConnected(false)
           }
         }}
       >

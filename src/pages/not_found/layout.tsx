@@ -24,7 +24,7 @@ function RootLayout ({ children }: { children: React.ReactNode }): JSX.Element {
       </head>
       <body>
         {children}
-        <script src="/scripts/htmx.min.js.gz" async defer />
+        <script src="/scripts/htmx.min.js" async defer />
       </body>
     </html>
   )

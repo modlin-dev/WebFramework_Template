@@ -3,12 +3,14 @@ import { Gradient, rgb } from 'terminal/gradient'
 import logger from 'terminal/logger'
 import term from 'child_process'
 
-term.exec(
-  'bunx tailwindcss -i public/styles/index.css -o public/styles/tailwind.css --minify',
-  (_error, _stdout, stderr) => {
-    console.log(stderr)
-  }
-)
+if (Bun.env.MODE === 'DEVELOPEMENT') {
+  term.exec(
+    'bunx tailwindcss -i public/styles/index.css -o public/styles/tailwind.css --minify',
+    (_error, _stdout, stderr) => {
+      console.log(stderr)
+    }
+  )
+}
 
 // Started Notice
 console.clear()
