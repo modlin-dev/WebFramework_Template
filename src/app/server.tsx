@@ -6,7 +6,6 @@ import { compressPlugin } from 'plugins/compress.plugin'
 import logger from 'terminal/logger'
 import { Chalk } from 'terminal/chalk'
 import { Gradient, rgb } from 'terminal/gradient'
-import { renderToString } from 'react-dom/server'
 import { URL } from 'modules/common.module'
 
 const app = new Elysia()
@@ -61,11 +60,11 @@ const app = new Elysia()
 
       set.status = 404
       return (
-      <RootLayout>
-        <Loading />
-        <App />
-        <script src="/scripts/not_found.min.js" async defer />
-      </RootLayout>
+        <RootLayout>
+          <Loading />
+          <App />
+          <script src="/scripts/not_found.min.js" async defer />
+        </RootLayout>
       )
     }
 

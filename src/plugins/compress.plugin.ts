@@ -5,7 +5,7 @@ import { renderToString } from 'react-dom/server'
 export function compressPlugin (): Elysia {
   return new Elysia({
     name: 'compressPlugin'
-  }).onAfterHandle(async ({ response, set }) => {
+  }).onAfterHandle(({ response, set }) => {
     if (isValidElement(response)) {
       const html = renderToString(response)
       set.headers['Content-Encoding'] = 'gzip'

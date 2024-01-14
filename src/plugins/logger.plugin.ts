@@ -17,19 +17,15 @@ export function loggerPlugin (): Elysia {
       if (status > 499) {
         return Chalk.Forground.Red(status.toString())
       }
-
       if (status > 399) {
         return Chalk.Forground.Orange(`${status} Not Found`)
       }
-
       if (status > 299) {
         return Chalk.Forground.White(`${status} Found`)
       }
-
       if (status > 199) {
         return Chalk.Forground.Green(`${status} OK`)
       }
-
       return Chalk.Forground.Cyan(status.toString())
     }
 
@@ -47,13 +43,10 @@ export function loggerPlugin (): Elysia {
       if (protocol.startsWith('HTTP')) {
         if (WSEndPoints.some((value) => endpoint === value)) {
           if (protocol.endsWith('S')) return Chalk.Forground.Magenta('WSS')
-
           return Chalk.Forground.Magenta('WS')
         }
-
         return Chalk.Forground.Blue(protocol)
       }
-
       return Chalk.Forground.White(protocol)
     }
 
