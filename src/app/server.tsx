@@ -7,6 +7,7 @@ import logger from 'terminal/logger'
 import { Chalk } from 'terminal/chalk'
 import { Gradient, rgb } from 'terminal/gradient'
 import { URL } from 'modules/common.module'
+import { renderToString } from 'react-dom/server'
 
 const app = new Elysia()
   .use(servePlugin()) // Serves a Public Directory
@@ -27,6 +28,18 @@ const app = new Elysia()
         minify: true
       })
 
+      if (Bun.env.BUILD === 'TRUE') {
+        const html = renderToString(
+          <RootLayout>
+            <Loading />
+            <App />
+            <script src="/scripts/home.min.js" async defer />
+          </RootLayout>
+        )
+
+        await Bun.write('src/html/home.html', '<!DOCTYPE html>' + html)
+      }
+
       return (
         <RootLayout>
           <Loading />
@@ -37,7 +50,8 @@ const app = new Elysia()
     }
 
     set.headers['Content-Encoding'] = 'gzip'
-    return Bun.file('src/html/home.html')
+    set.headers['Content-Type'] = 'text/html; charset=utf-8'
+    return Response(Bun.gzipSync(Buffer.from(await Bun.file('src/html/home.html').text())))
   }) // Homepage
   .ws('/server', {
     message (_ws, _message) {},
@@ -58,6 +72,18 @@ const app = new Elysia()
         minify: true
       })
 
+      if (Bun.env.BUILD === 'TRUE') {
+        const html = renderToString(
+          <RootLayout>
+            <Loading />
+            <App />
+            <script src="/scripts/home.min.js" async defer />
+          </RootLayout>
+        )
+
+        await Bun.write('src/html/not_found.html', '<!DOCTYPE html>' + html)
+      }
+
       set.status = 404
       return (
         <RootLayout>
@@ -69,7 +95,8 @@ const app = new Elysia()
     }
 
     set.headers['Content-Encoding'] = 'gzip'
-    return Bun.file('src/html/home.html')
+    set.headers['Content-Type'] = 'text/html; charset=utf-8'
+    return Response(Bun.gzipSync(Buffer.from(await Bun.file('src/html/not_found.html').text())))
   }) // 404 Page
   .listen(80, (server) => {
     const Elysia = new Gradient({

@@ -25,16 +25,11 @@ export function servePlugin (_data?: { path?: string | 'public', prefix?: string
   for (const file of readFilesSync(data.path)) {
     app.get(data.prefix + file.slice(data.path.length + 1), async ({ set }) => {
       const File = Bun.file(file)
-      if (Bun.env.PRODUCTION === 'TRUE') {
-        if (gzip.some((ext) => file.endsWith(ext))) set.headers['Content-Encoding'] = 'gzip'
-        return File
-      } else {
-        if (gzip.some((ext) => file.endsWith(ext))) {
-          await Bun.write(file, Bun.gzipSync(Buffer.from(await File.text())))
-          set.headers['Content-Encoding'] = 'gzip'
-        }
-        return Bun.file(file)
+      if (gzip.some((ext) => file.endsWith(ext))) {
+        set.headers['Content-Encoding'] = 'gzip'
+        return new Response(Bun.gzipSync(Buffer.from(await File.text())))
       }
+      return File
     })
   }
 
