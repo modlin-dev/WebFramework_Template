@@ -3,7 +3,7 @@ import { Gradient, rgb } from 'terminal/gradient'
 import logger from 'terminal/logger'
 import term from 'child_process'
 
-if (Bun.env.MODE === 'DEVELOPEMENT') {
+if (Bun.env.PRODUCTION === 'FALSE') {
   term.exec(
     'bunx tailwindcss -i public/styles/index.css -o public/styles/tailwind.css --minify',
     (_error, _stdout, stderr) => {

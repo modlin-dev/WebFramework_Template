@@ -4,8 +4,8 @@
   "module": "src/index.ts",
   "type": "module",
   "scripts": {
-    "dev": "tailwindcss -i src/styles/index.css -o src/styles/tailwind.css --watch && bun run --watch src/index.ts",
-    "start": "bun run --watch src/index.ts",
+    "dev": "bun run src/index.ts",
+    "start": "bun run --bun --watch src/index.ts",
     "build": "bun build src/index.ts --outdir dist",
     "preview": "bun run dist/index.js",
     "client": "bun run --watch src/app/client.ts",
@@ -42,6 +42,7 @@
     "@next/font": "^14.0.4",
     "@types/brotli": "^1.3.4",
     "brotli": "^1.3.3",
+    "bun": "^1.0.22",
     "elysia": "^0.8.8",
     "elysia-compression": "^0.0.7",
     "eslint-plugin-solid": "^0.13.1",

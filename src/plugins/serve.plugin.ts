@@ -33,7 +33,7 @@ export function servePlugin (_data?: { path?: string | 'public', prefix?: string
           await Bun.write(file, Bun.gzipSync(Buffer.from(await File.text())))
           set.headers['Content-Encoding'] = 'gzip'
         }
-        return File
+        return Bun.file(file)
       }
     })
   }

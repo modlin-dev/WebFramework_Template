@@ -1,4 +1,4 @@
-import React, { type JSX } from 'react'
+import { type JSX, type ReactNode } from 'react'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   description: 'Web Framework Template'
 }
 
-function RootLayout (props: { children: React.ReactNode }): JSX.Element {
+function RootLayout (props: { children: ReactNode }): JSX.Element {
   return (
     <html lang="en">
       <head>

@@ -1,26 +1,24 @@
 import { Elysia, t as T } from 'elysia'
 import { cors } from '@elysiajs/cors'
-import { servePlugin } from '../plugins/serve.plugin.ts'
-import { loggerPlugin } from '../plugins/logger.plugin.ts'
+import { servePlugin } from 'plugins/serve.plugin'
+import { loggerPlugin } from 'plugins/logger.plugin'
+import { compressPlugin } from 'plugins/compress.plugin'
 import logger from 'terminal/logger'
 import { Chalk } from 'terminal/chalk'
 import { Gradient, rgb } from 'terminal/gradient'
 import { renderToString } from 'react-dom/server'
-import { URL } from '../modules/ssr'
-import React from 'react'
+import { URL } from 'modules/common.module'
 
 const app = new Elysia()
   .use(servePlugin()) // Serves a Public Directory
   .use(loggerPlugin()) // Use only on Developement
+  .use(compressPlugin())
   .use(cors()) // Enables CORS
   .get('/', async ({ set }) => {
-    if (Bun.env.MODE === 'PRODUCTION') {
-      set.headers['Content-Encoding'] = 'gzip'
-      return Bun.file('src/html/home.html')
-    } else {
-      const { default: RootLayout } = await import('../pages/home/layout')
-      const { default: Loading } = await import('../components/loading')
-      const { default: App } = await import('../pages/home/page')
+    if (Bun.env.PRODUCTION === 'FALSE') {
+      const { default: RootLayout } = await import('pages/home/layout')
+      const { default: Loading } = await import('components/loading')
+      const { default: App } = await import('pages/home/page')
 
       await Bun.build({
         entrypoints: ['src/pages/home/script.tsx'],
@@ -30,33 +28,28 @@ const app = new Elysia()
         minify: true
       })
 
-      const html = renderToString(
+      return (
         <RootLayout>
           <Loading />
           <App />
           <script src="/scripts/home.min.js" async defer />
         </RootLayout>
       )
-      await Bun.write('src/html/home.html', Bun.gzipSync(Buffer.from('<!DOCTYPE html>' + html)))
-
-      set.headers['Content-Encoding'] = 'gzip'
-      return Bun.file('src/html/home.html')
     }
+
+    set.headers['Content-Encoding'] = 'gzip'
+    return Bun.file('src/html/home.html')
   }) // Homepage
   .ws('/server', {
     message (_ws, _message) {},
     body: T.String(),
     response: T.String()
-  })
+  }) // Server
   .all('*', async ({ set }) => {
-    if (Bun.env.MODE === 'PRODUCTION') {
-      set.headers['Content-Encoding'] = 'gzip'
-      set.status = 404
-      return Bun.file('src/html/not_found.html')
-    } else {
-      const { default: RootLayout } = await import('../pages/not_found/layout')
-      const { default: Loading } = await import('../components/loading')
-      const { default: App } = await import('../pages/not_found/page')
+    if (Bun.env.PRODUCTION === 'FALSE') {
+      const { default: RootLayout } = await import('pages/not_found/layout')
+      const { default: Loading } = await import('components/loading')
+      const { default: App } = await import('pages/not_found/page')
 
       await Bun.build({
         entrypoints: ['src/pages/not_found/script.tsx'],
@@ -66,23 +59,18 @@ const app = new Elysia()
         minify: true
       })
 
-      const html = renderToString(
-        <RootLayout>
-          <Loading />
-          <App />
-          <script src="/scripts/not_found.min.js" async defer />
-        </RootLayout>
-      )
-      await Bun.write(
-        'src/html/not_found.html',
-        Bun.gzipSync(Buffer.from('<!DOCTYPE html>' + html))
-      )
-
-      set.headers['Content-Encoding'] = 'gzip'
-      set.headers['Content-Type'] = 'text/html; charset=utf8'
       set.status = 404
-      return '<!DOCTYPE html>' + html
+      return (
+      <RootLayout>
+        <Loading />
+        <App />
+        <script src="/scripts/not_found.min.js" async defer />
+      </RootLayout>
+      )
     }
+
+    set.headers['Content-Encoding'] = 'gzip'
+    return Bun.file('src/html/home.html')
   }) // 404 Page
   .listen(80, (server) => {
     const Elysia = new Gradient({
