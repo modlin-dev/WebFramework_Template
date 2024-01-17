@@ -14,6 +14,7 @@ const app = new Elysia()
   .use(loggerPlugin()) // Use only on Developement
   .use(compressPlugin())
   .use(cors()) // Enables CORS
+  .onRequest((context) => { const ip = context.request.credentials; console.log(ip) })
   .get('/', async ({ set }) => {
     if (Bun.env.PRODUCTION === 'FALSE') {
       const { default: RootLayout } = await import('pages/home/layout')
@@ -51,7 +52,7 @@ const app = new Elysia()
 
     set.headers['Content-Encoding'] = 'gzip'
     set.headers['Content-Type'] = 'text/html; charset=utf-8'
-    return Response(Bun.gzipSync(Buffer.from(await Bun.file('src/html/home.html').text())))
+    return new Response(Bun.gzipSync(Buffer.from(await Bun.file('src/html/home.html').text())))
   }) // Homepage
   .ws('/server', {
     message (_ws, _message) {},
@@ -96,7 +97,7 @@ const app = new Elysia()
 
     set.headers['Content-Encoding'] = 'gzip'
     set.headers['Content-Type'] = 'text/html; charset=utf-8'
-    return Response(Bun.gzipSync(Buffer.from(await Bun.file('src/html/not_found.html').text())))
+    return new Response(Bun.gzipSync(Buffer.from(await Bun.file('src/html/not_found.html').text())))
   }) // 404 Page
   .listen(80, (server) => {
     const Elysia = new Gradient({
