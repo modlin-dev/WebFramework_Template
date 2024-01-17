@@ -3,7 +3,7 @@ import logger from 'terminal/logger'
 import { Chalk } from 'terminal/chalk'
 
 export function loggerPlugin (): Elysia {
-  const app = new Elysia({ name: 'Logger' }).onRequest(({ request, set }) => {
+  return new Elysia({ name: 'Logger' }).onRequest(({ request, set }) => {
     const Method = request.method
       .replace('GET', Chalk.Forground.RGB(107, 221, 154, 'GET'))
       .replace('POST', Chalk.Forground.RGB(255, 228, 126, 'POST'))
@@ -52,8 +52,6 @@ export function loggerPlugin (): Elysia {
 
     logger.log(Method, Endpoint, Protocol(), Status(set.status ?? 100))
   })
-
-  return app
 }
 
 export default loggerPlugin
