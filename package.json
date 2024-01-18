@@ -10,7 +10,7 @@
     "preview": "bun run dist/index.js",
     "client": "bun run --watch src/app/client.ts",
     "typecheck": "tsc",
-    "tailwind": "bunx tailwindcss -i src/styles/index.css -o src/styles/tailwind.css --watch"
+    "tailwind": "tailwindcss -i public/styles/index.css -o public/styles/tailwind.css --minify --watch"
   },
   "devDependencies": {
     "@craco/craco": "^7.1.0",
@@ -48,6 +48,7 @@
     "eslint-plugin-solid": "^0.13.1",
     "million": "latest",
     "next": "^14.0.4",
+    "pocketbase": "^0.20.3",
     "preact-render-to-string": "^6.3.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

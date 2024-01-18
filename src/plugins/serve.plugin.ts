@@ -20,7 +20,7 @@ export function servePlugin (_data?: { path?: string | 'public', prefix?: string
     path: _data?.path ?? 'public',
     prefix: _data?.prefix ?? '/'
   }
-  const gzip = ['.html', '.css', '.js', '.wasm']
+  const gzip = ['.html', '.js', '.wasm']
 
   for (const file of readFilesSync(data.path)) {
     app.get(data.prefix + file.slice(data.path.length + 1), async ({ set }) => {

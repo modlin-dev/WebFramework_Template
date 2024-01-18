@@ -12,6 +12,7 @@ export function compressPlugin (): Elysia {
       set.headers['Content-Type'] = 'text/html; charset=utf-8'
       return new Response(Bun.gzipSync(Buffer.from('<!DOCTYPE html>' + html)))
     }
+    // Add more Handlers
   })
 }
 
