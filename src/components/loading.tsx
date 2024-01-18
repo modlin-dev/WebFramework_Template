@@ -14,6 +14,7 @@ function Loading (): React.ReactNode {
   server.on('close', () => {
     setStyle({ visibility: 'visible' })
     setClass('')
+    server.close()
     setTimeout(() => {
       window.location.reload()
     }, 2000)

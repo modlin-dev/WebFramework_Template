@@ -1,41 +1,32 @@
 import { useState, type JSX } from 'react'
-import { edenTreaty } from '@elysiajs/eden'
-import { type App } from '../../app/server'
 
 function Home (): JSX.Element {
   // --
-  const [isConnected, setConnected] = useState(false)
-  const server = edenTreaty<App>('ws://localhost').server.subscribe()
-  const [CursorAt, setCursorAt] = useState({
+  const [CursorStyle, setCursorStyle] = useState({
     top: 0,
-    left: 0
-  })
-
-  server.on('open', () => {
-    if (!isConnected) console.log('[WS] Connected')
-    setConnected(true)
-  })
-  server.on('close', () => {
-    console.log('[WS] Disconnected')
-    setConnected(false)
-  })
-  server.on('error', () => {
-    console.log('[WS] Connecting')
-    setConnected(false)
+    left: 0,
+    height: '16px',
+    width: '16px'
   })
   // --
   return (
-    <main className="bg-white h-screen" onMouseMove={(event) => {
-      setCursorAt({
-        top: event.clientY,
-        left: event.clientX
+    <main
+    onMouseMove={(event) => {
+      setCursorStyle({
+        ...CursorStyle,
+        top: event.clientY - 8,
+        left: event.clientX - 8
       })
-    }}>
-      <div style={CursorAt} className="absolute h-4 w-4 rounded-full bg-black"></div>
-      <header className="absolute inset-x-0 top-0 z-50">
+    }} className="bg-white h-screen">
+      <div
+        style={CursorStyle}
+        className="absolute rounded-full bg-black select-none"
+
+      ></div>
+      <header className="absolute inset-x-0 top-0">
         <nav className="flex items-center justify-between p-6 lg:px-8" aria-label="Global">
           <div className="flex lg:flex-1">
-            <a href="#" className="-m-1.5 p-1.5">
+            <a href="#" className="-m-1.5 p-1.5 cursor-none">
               <span className="sr-only">Your Company</span>
               <img
                 className="h-8 w-auto"
@@ -188,6 +179,23 @@ function Home (): JSX.Element {
             <div className="mt-10 flex items-center justify-center gap-x-6">
               <a className="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
                 Get started
+                <div
+                  onMouseEnter={() => {
+                    setCursorStyle({
+                      ...CursorStyle,
+                      height: '24px',
+                      width: '24px'
+                    })
+                  }}
+                  onMouseOut={() => {
+                    setCursorStyle({
+                      ...CursorStyle,
+                      width: '16px',
+                      height: '16px'
+                    })
+                  }}
+                  className="absolute w-full h-full z-50"
+                ></div>
               </a>
               <a href="#" className="text-sm font-semibold leading-6 text-gray-900">
                 Learn more <span aria-hidden="true">→</span>
@@ -196,6 +204,7 @@ function Home (): JSX.Element {
           </div>
         </div>
       </div>
+
     </main>
   )
 }
