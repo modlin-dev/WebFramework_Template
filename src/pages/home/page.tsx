@@ -6,6 +6,10 @@ function Home (): JSX.Element {
   // --
   const [isConnected, setConnected] = useState(false)
   const server = edenTreaty<App>('ws://localhost').server.subscribe()
+  const [CursorAt, setCursorAt] = useState({
+    top: 0,
+    left: 0
+  })
 
   server.on('open', () => {
     if (!isConnected) console.log('[WS] Connected')
@@ -21,7 +25,13 @@ function Home (): JSX.Element {
   })
   // --
   return (
-    <main className="bg-white h-screen">
+    <main className="bg-white h-screen" onMouseMove={(event) => {
+      setCursorAt({
+        top: event.clientY,
+        left: event.clientX
+      })
+    }}>
+      <div style={CursorAt} className="absolute h-4 w-4 rounded-full bg-black"></div>
       <header className="absolute inset-x-0 top-0 z-50">
         <nav className="flex items-center justify-between p-6 lg:px-8" aria-label="Global">
           <div className="flex lg:flex-1">
