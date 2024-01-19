@@ -18,7 +18,6 @@ const app = new Elysia()
   .get('/', async ({ set }) => {
     if (Bun.env.PRODUCTION === 'FALSE') {
       const { default: RootLayout } = await import('pages/home/layout')
-      const { default: Loading } = await import('components/loading')
       const { default: App } = await import('pages/home/page')
 
       await Bun.build({
@@ -32,7 +31,6 @@ const app = new Elysia()
       if (Bun.env.BUILD === 'TRUE') {
         const html = renderToString(
           <RootLayout>
-            <Loading />
             <App />
             <script src="/scripts/home.min.js" async defer />
           </RootLayout>
@@ -43,7 +41,6 @@ const app = new Elysia()
 
       return (
         <RootLayout>
-          <Loading />
           <App />
           <script src="/scripts/home.min.js" async defer />
         </RootLayout>
@@ -62,7 +59,6 @@ const app = new Elysia()
   .all('*', async ({ set }) => {
     if (Bun.env.PRODUCTION === 'FALSE') {
       const { default: RootLayout } = await import('pages/not_found/layout')
-      const { default: Loading } = await import('components/loading')
       const { default: App } = await import('pages/not_found/page')
 
       await Bun.build({
@@ -76,7 +72,6 @@ const app = new Elysia()
       if (Bun.env.BUILD === 'TRUE') {
         const html = renderToString(
           <RootLayout>
-            <Loading />
             <App />
             <script src="/scripts/home.min.js" async defer />
           </RootLayout>
@@ -88,7 +83,6 @@ const app = new Elysia()
       set.status = 404
       return (
         <RootLayout>
-          <Loading />
           <App />
           <script src="/scripts/not_found.min.js" async defer />
         </RootLayout>

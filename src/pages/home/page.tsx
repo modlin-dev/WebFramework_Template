@@ -1,28 +1,60 @@
-import { useState, type JSX } from 'react'
+import { useState, type JSX, type CSSProperties } from 'react'
+import { type App } from 'app/server'
+import { edenTreaty } from '@elysiajs/eden'
 
 function Home (): JSX.Element {
   // --
-  const [CursorStyle, setCursorStyle] = useState({
-    top: 0,
-    left: 0,
-    height: '16px',
-    width: '16px'
-  })
+  let wasDisconnected = false
+  function websocket (): void {
+    const app = edenTreaty<App>('ws://localhost')
+    const server = app.server.subscribe()
+
+    server.on('close', () => {
+      console.log('[WS] Disconnected')
+      wasDisconnected = true
+      websocket()
+    })
+    server.on('open', () => {
+      console.log('[WS] Connected')
+      if (wasDisconnected) {
+        window.location.reload()
+      }
+    })
+  }
+  websocket()
+
+  function hover (is: boolean): void {
+    if (is) {
+      const cursor = document.getElementById('cursor')
+      if (cursor !== null) {
+        cursor.style.height = '24px'
+        cursor.style.width = '24px'
+        cursor.style.marginTop = '-12px'
+        cursor.style.marginLeft = '-12px'
+      }
+    } else {
+      const cursor = document.getElementById('cursor')
+      if (cursor !== null) {
+        cursor.style.height = '16px'
+        cursor.style.width = '16px'
+        cursor.style.marginTop = '-8px'
+        cursor.style.marginLeft = '-8px'
+      }
+    }
+  }
   // --
   return (
     <main
-    onMouseMove={(event) => {
-      setCursorStyle({
-        ...CursorStyle,
-        top: event.clientY - 8,
-        left: event.clientX - 8
-      })
-    }} className="bg-white h-screen">
-      <div
-        style={CursorStyle}
-        className="absolute rounded-full bg-black select-none"
-
-      ></div>
+      onMouseMove={(event) => {
+        const cursor = document.getElementById('cursor')
+        if (cursor !== null) {
+          cursor.style.top = event.clientY + 'px'
+          cursor.style.left = event.clientX + 'px'
+        }
+      }}
+      className="bg-white h-screen cursor-none"
+    >
+      <div id="cursor" className="absolute rounded-full bg-black select-none pointer-events-none z-50 h-4 w-4"></div>
       <header className="absolute inset-x-0 top-0">
         <nav className="flex items-center justify-between p-6 lg:px-8" aria-label="Global">
           <div className="flex lg:flex-1">
@@ -177,25 +209,16 @@ function Home (): JSX.Element {
               commodo. Elit sunt amet fugiat veniam occaecat fugiat aliqua.
             </p>
             <div className="mt-10 flex items-center justify-center gap-x-6">
-              <a className="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+              <a
+              onMouseEnter={() => {
+                hover(true)
+              }}
+              onMouseOut={() => {
+                hover(false)
+              }}
+              href='#'
+              className="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
                 Get started
-                <div
-                  onMouseEnter={() => {
-                    setCursorStyle({
-                      ...CursorStyle,
-                      height: '24px',
-                      width: '24px'
-                    })
-                  }}
-                  onMouseOut={() => {
-                    setCursorStyle({
-                      ...CursorStyle,
-                      width: '16px',
-                      height: '16px'
-                    })
-                  }}
-                  className="absolute w-full h-full z-50"
-                ></div>
               </a>
               <a href="#" className="text-sm font-semibold leading-6 text-gray-900">
                 Learn more <span aria-hidden="true">→</span>
@@ -204,7 +227,6 @@ function Home (): JSX.Element {
           </div>
         </div>
       </div>
-
     </main>
   )
 }

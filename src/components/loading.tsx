@@ -1,27 +1,8 @@
-import { useState } from 'react'
-import { type App } from 'app/server'
-import { edenTreaty } from '@elysiajs/eden'
-
 function Loading (): React.ReactNode {
   // --
-  const [getStyle, setStyle] = useState<any>({ visibility: 'hidden' })
-  const [getClass, setClass] = useState(
-    'animate-fade'
-  )
-
-  const server = edenTreaty<App>('ws://localhost').server.subscribe()
-
-  server.on('close', () => {
-    setStyle({ visibility: 'visible' })
-    setClass('')
-    server.close()
-    setTimeout(() => {
-      window.location.reload()
-    }, 2000)
-  })
   // --
   return (
-    <div style={getStyle} className={'bg-white dark:bg-black flex justify-center items-center h-screen w-screen gap-8 flex-col fixed transition-all animate-fade z-50' + getClass}>
+    <div className={'bg-white dark:bg-black flex justify-center items-center h-screen w-screen gap-8 flex-col fixed transition-all animate-fade z-50'}>
       <svg
         version="1.1"
         id="Layer_1"
