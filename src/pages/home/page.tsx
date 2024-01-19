@@ -25,36 +25,26 @@ function Home (): JSX.Element {
 
   function hover (is: boolean): void {
     if (is) {
-      const cursor = document.getElementById('cursor')
+      const cursor = document.getElementById('live-cursor')
       if (cursor !== null) {
-        cursor.style.height = '24px'
-        cursor.style.width = '24px'
-        cursor.style.marginTop = '-12px'
-        cursor.style.marginLeft = '-12px'
+        cursor.style.height = '80px'
+        cursor.style.width = '80px'
+        cursor.style.marginTop = '-40px'
+        cursor.style.marginLeft = '-40px'
       }
     } else {
-      const cursor = document.getElementById('cursor')
+      const cursor = document.getElementById('live-cursor')
       if (cursor !== null) {
-        cursor.style.height = '16px'
-        cursor.style.width = '16px'
-        cursor.style.marginTop = '-8px'
-        cursor.style.marginLeft = '-8px'
+        cursor.style.height = '20px'
+        cursor.style.width = '20px'
+        cursor.style.marginTop = '-10px'
+        cursor.style.marginLeft = '-10px'
       }
     }
   }
   // --
   return (
-    <main
-      onMouseMove={(event) => {
-        const cursor = document.getElementById('cursor')
-        if (cursor !== null) {
-          cursor.style.top = event.clientY + 'px'
-          cursor.style.left = event.clientX + 'px'
-        }
-      }}
-      className="bg-white h-screen cursor-none"
-    >
-      <div id="cursor" className="absolute rounded-full bg-black select-none pointer-events-none z-50 h-4 w-4"></div>
+    <main className="bg-white h-screen cursor-none">
       <header className="absolute inset-x-0 top-0">
         <nav className="flex items-center justify-between p-6 lg:px-8" aria-label="Global">
           <div className="flex lg:flex-1">
@@ -210,14 +200,15 @@ function Home (): JSX.Element {
             </p>
             <div className="mt-10 flex items-center justify-center gap-x-6">
               <a
-              onMouseEnter={() => {
-                hover(true)
-              }}
-              onMouseOut={() => {
-                hover(false)
-              }}
-              href='#'
-              className="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+                onMouseEnter={() => {
+                  hover(true)
+                }}
+                onMouseOut={() => {
+                  hover(false)
+                }}
+                href="#"
+                className="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+              >
                 Get started
               </a>
               <a href="#" className="text-sm font-semibold leading-6 text-gray-900">

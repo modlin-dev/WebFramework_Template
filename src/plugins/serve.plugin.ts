@@ -16,21 +16,14 @@ export function * readFilesSync (dir: string): Generator<string> {
 
 export function servePlugin (_data?: { path?: string | 'public', prefix?: string | '/' }): Elysia {
   const app = new Elysia({ name: 'serve' })
+
   const data = {
     path: _data?.path ?? 'public',
     prefix: _data?.prefix ?? '/'
   }
-  const gzip = ['.html', '.js', '.wasm']
 
   for (const file of readFilesSync(data.path)) {
-    app.get(data.prefix + file.slice(data.path.length), async ({ set }) => {
-      const File = Bun.file(file)
-      if (gzip.some((ext) => file.endsWith(ext))) {
-        set.headers['Content-Encoding'] = 'gzip'
-        return new Response(Bun.gzipSync(Buffer.from(await File.text())))
-      }
-      return File
-    })
+    app.get(data.prefix + file.slice(data.path.length + 1), () => Bun.file(file))
   }
 
   return app

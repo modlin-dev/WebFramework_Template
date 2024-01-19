@@ -19,6 +19,7 @@ const app = new Elysia()
     if (Bun.env.PRODUCTION === 'FALSE') {
       const { default: RootLayout } = await import('pages/home/layout')
       const { default: App } = await import('pages/home/page')
+      const { default: Cursor } = await import('components/cursor')
 
       await Bun.build({
         entrypoints: ['src/pages/home/script.tsx'],
@@ -32,6 +33,7 @@ const app = new Elysia()
         const html = renderToString(
           <RootLayout>
             <App />
+            <Cursor />
             <script src="/scripts/home.min.js" async defer />
           </RootLayout>
         )
@@ -42,6 +44,7 @@ const app = new Elysia()
       return (
         <RootLayout>
           <App />
+          <Cursor />
           <script src="/scripts/home.min.js" async defer />
         </RootLayout>
       )
