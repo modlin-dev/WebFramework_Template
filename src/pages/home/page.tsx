@@ -1,4 +1,4 @@
-import { useState, type JSX, type CSSProperties } from 'react'
+import { type JSX } from 'react'
 import { type App } from 'app/server'
 import { edenTreaty } from '@elysiajs/eden'
 

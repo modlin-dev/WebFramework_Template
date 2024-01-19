@@ -23,7 +23,7 @@ export function servePlugin (_data?: { path?: string | 'public', prefix?: string
   const gzip = ['.html', '.js', '.wasm']
 
   for (const file of readFilesSync(data.path)) {
-    app.get(data.prefix + file.slice(data.path.length + 1), async ({ set }) => {
+    app.get(data.prefix + file.slice(data.path.length), async ({ set }) => {
       const File = Bun.file(file)
       if (gzip.some((ext) => file.endsWith(ext))) {
         set.headers['Content-Encoding'] = 'gzip'

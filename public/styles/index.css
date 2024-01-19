@@ -7,6 +7,10 @@
   }
 }
 
+a {
+  cursor: none
+}
+
 @keyframes fade {
   0% {
     visibility: visible;
