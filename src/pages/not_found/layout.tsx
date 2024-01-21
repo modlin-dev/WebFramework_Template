@@ -1,4 +1,3 @@
-import { type JSX, type ReactNode } from 'react'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
@@ -6,7 +5,7 @@ export const metadata: Metadata = {
   description: 'Opps, seems like you entered the wrong page!'
 }
 
-function RootLayout ({ children }: { children: ReactNode }): JSX.Element {
+function RootLayout ({ children }: { children: React.ReactNode }): JSX.Element {
   return (
     <html lang="en">
       <head>
