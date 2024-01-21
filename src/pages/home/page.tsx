@@ -1,4 +1,3 @@
-import { type JSX } from 'react'
 import { type App } from 'app/server'
 import { edenTreaty } from '@elysiajs/eden'
 

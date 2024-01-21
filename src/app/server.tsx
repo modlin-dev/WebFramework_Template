@@ -10,11 +10,13 @@ import { URL } from 'modules/common.module'
 import { renderToString } from 'react-dom/server'
 
 const app = new Elysia()
+  .use(cors()) // Enables CORS
+  .use(compressPlugin()) // Compresses requests into gzip
   .use(servePlugin()) // Serves a Public Directory
   .use(loggerPlugin()) // Use only on Developement
-  .use(compressPlugin())
-  .use(cors()) // Enables CORS
-  .onRequest((context) => { const ip = context.request.credentials; console.log(ip) })
+  .onRequest(({ request }) => {
+    console.log(request.credentials)
+  })
   .get('/', async ({ set }) => {
     if (Bun.env.PRODUCTION === 'FALSE') {
       const { default: RootLayout } = await import('pages/home/layout')

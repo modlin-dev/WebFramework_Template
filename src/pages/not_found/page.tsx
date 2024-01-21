@@ -1,5 +1,3 @@
-import { type JSX } from 'react'
-
 function NotFound (): JSX.Element {
   // --
   // --
