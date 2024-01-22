@@ -19,6 +19,10 @@ export function URL (
   return Chalk.Forground.Red(`https://${hostname}:${port}`)
 }
 
+export function Custom (message: string): string {
+  return ('          ').slice(message.length) + message
+}
+
 export function * readAllFiles (dir: string): Generator<string> {
   const files = fs.readdirSync(dir, { withFileTypes: true })
 
