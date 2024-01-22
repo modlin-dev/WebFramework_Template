@@ -18,10 +18,9 @@ export function servePlugin (data?: { path?: string, prefix?: string }): Elysia 
   const app = new Elysia({ name: 'serve' })
 
   for (const file of readFilesSync(data?.path ?? 'public')) {
-    app.get(data?.prefix ?? '/' + file.slice((data?.path ?? 'public').length + 1), async ({ set }) => {
-      set.headers['Content-Encoding'] = 'gzip'
-      return new Response(Buffer.from(await Bun.file(file).text()))
-    })
+    app.get(data?.prefix ?? '/' + file.slice((data?.path ?? 'public').length + 1), () =>
+      Bun.file(file)
+    )
   }
 
   return app

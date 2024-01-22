@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: '404 - Page Not Found',
+  title: '404 Not Found',
   description: 'Opps, seems like you entered the wrong page!'
 }
 
@@ -16,14 +16,14 @@ function RootLayout ({ children }: { children: React.ReactNode }): JSX.Element {
         <link rel="icon" href={metadata.icons?.toString() ?? '/favicon.ico'} type="image/x-icon" />
         <link
           rel="stylesheet"
-          href="/styles/tailwind.css"
+          href="/styles/tailwind.min.css"
           type="text/css"
           media="all"
         />
       </head>
       <body>
         {children}
-        <script src="/scripts/htmx.min.js" async defer />
+        <script src="/scripts/typescript.min.js" async defer />
       </body>
     </html>
   )
