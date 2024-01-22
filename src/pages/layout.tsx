@@ -27,7 +27,6 @@ function RootLayout (props: { children: React.ReactNode }): JSX.Element {
         className="bg-black w-full h-screen cursor-none"
       >
         {props.children}
-        <script src="/scripts/htmx.min.js" async defer />
       </body>
     </html>
   )
