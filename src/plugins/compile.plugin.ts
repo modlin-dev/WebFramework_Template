@@ -6,9 +6,17 @@ const DOCTYPE = (type: string | 'html'): string => `<!DOCTYPE ${type}>`
 
 export function compilePlugin (): Elysia {
   return new Elysia().onAfterHandle(async ({ response, path }) => {
+    const WhiteListed = [
+      '/',
+      '/server'
+    ]
     if (isValidElement(response)) {
       const html = renderToString(response)
-      await Bun.write(node_path.join('dist', path.replace('/', ''), 'index.html'), Bun.gzipSync(Buffer.from(DOCTYPE('html') + html)))
+      if (WhiteListed.includes(path)) {
+        await Bun.write(node_path.join('dist', path, 'index.html'), Bun.gzipSync(Buffer.from(DOCTYPE('html') + html)))
+      } else {
+        await Bun.write(node_path.join('dist', '*', 'index.html'), Bun.gzipSync(Buffer.from(DOCTYPE('html') + html)))
+      }
     }
     if (response === String()) {
       // Add Handlers
